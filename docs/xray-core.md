@@ -3,11 +3,11 @@
 ## 1. Генерим ключи
 Private + Public keys
 ```
-docker run --rm ghcr.io/xtls/xray-core:latest xray x25519
+docker run --rm ghcr.io/xtls/xray-core:latest x25519
 ```
 UUID для первого клиента
 ```
-docker run --rm ghcr.io/xtls/xray-core:latest xray uuid 
+docker run --rm ghcr.io/xtls/xray-core:latest uuid 
 ```
 Short ID для первого клиента
 ```
@@ -15,7 +15,7 @@ openssl rand -hex 8
 ```
 
 ## 2. Пример конфига config/config.json
-[Пример](https://github.com/dxunvrs/xray-subscription/tree/master/config/config_example.json) конфига, там уже расписано, что и куда подставлять
+[Пример](https://github.com/dxunvrs/xray-subscription/tree/master/config/simple_config_example.json) конфига, там уже расписано, что и куда подставлять
 
 ## 3. Docker compose файл для xray-core
 ``` 
@@ -44,6 +44,3 @@ vless://CLIENT_UUID@SERVER_IP:PORT?type=tcp&security=reality&pbk=PUBLIC_KEY&fp=B
 - PORT - указан в config_example.json - 443, можно изменить
 - SNI - указан в config_example.json - apple.com, можно изменить
 - NAME - любое имя, будет видно на клиенте
-
-## 6. Про API
-API будет по HTTP-запросам выдавать ключ (реализация подписки), также можно будет добавлять/изменять/удалять пользователей и смотреть статистику использования
