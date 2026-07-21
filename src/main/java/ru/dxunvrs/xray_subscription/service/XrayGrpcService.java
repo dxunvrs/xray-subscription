@@ -43,8 +43,8 @@ public class XrayGrpcService {
         }
     }
 
-    public void addVlessUser(String email,
-                             String uuid) {
+    public void addUser(String email,
+                        String uuid) {
         Account vlessAccount = Account.newBuilder()
                 .setId(uuid)
                 .setFlow("xtls-rprx-vision")
