@@ -1,3 +1,4 @@
+xray_subscriber.db
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
