@@ -13,10 +13,13 @@ public class SubscriptionService {
     private final VlessLinkBuilder vlessLinkBuilder;
 
     @Transactional(readOnly = true)
-    public String getSubscriptionContent(String token) {
-        UserEntity user = userRepository.findBySubscriptionToken(token)
+    public String getSubscriptionContent(String email) {
+        // UserEntity user = userRepository.findBySubscriptionToken(token)
+                //.orElseThrow(() -> new IllegalArgumentException("Нет такого пользователя"));
+
+        UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Нет такого пользователя"));
 
-        return vlessLinkBuilder.buildVlessLink(user.getUuid(), user.getEmail());
+        return vlessLinkBuilder.buildVlessLink(user.getUuid(), email);
     }
 }

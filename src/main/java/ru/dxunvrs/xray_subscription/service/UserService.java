@@ -21,12 +21,12 @@ public class UserService {
         }
 
         String userUuid = UUID.randomUUID().toString();
-        String subToken = UUID.randomUUID().toString().replace("-","");
+//        String subToken = UUID.randomUUID().toString().replace("-","");
 
         UserEntity entity = UserEntity.builder()
                 .email(email)
                 .uuid(userUuid)
-                .subscriptionToken(subToken)
+//                .subscriptionToken(subToken)
                 .build();
 
         xrayGrpcService.addUser(email, userUuid);
