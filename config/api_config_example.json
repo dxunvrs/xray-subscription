@@ -34,13 +34,7 @@
       "port": 443,
       "protocol": "vless",
       "settings": {
-        "clients": [
-          {
-            "id": "CLIENT UUID",
-            "flow": "xtls-rprx-vision",
-            "email": "CUSTOM USER NAME"
-          }
-        ],
+        "clients": [],
         "decryption": "none"
       },
       "streamSettings": {
