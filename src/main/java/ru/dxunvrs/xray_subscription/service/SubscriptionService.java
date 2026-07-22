@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dxunvrs.xray_subscription.entity.UserEntity;
-import ru.dxunvrs.xray_subscription.exception.InvalidSubscriptionException;
+import ru.dxunvrs.xray_subscription.exception.UserNotFoundException;
 import ru.dxunvrs.xray_subscription.repository.UserRepository;
 
 @Service
@@ -16,7 +16,7 @@ public class SubscriptionService {
     @Transactional(readOnly = true)
     public String getSubscriptionContent(String email) {
         UserEntity user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new InvalidSubscriptionException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return vlessLinkBuilder.buildVlessLink(user.getUuid(), email);
     }
