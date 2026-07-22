@@ -14,9 +14,6 @@ public class SubscriptionService {
 
     @Transactional(readOnly = true)
     public String getSubscriptionContent(String email) {
-        // UserEntity user = userRepository.findBySubscriptionToken(token)
-                //.orElseThrow(() -> new IllegalArgumentException("Нет такого пользователя"));
-
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Нет такого пользователя"));
 

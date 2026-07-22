@@ -20,7 +20,4 @@ public class UserEntity {
 
     @Column(nullable = false, unique = true)
     private String uuid;
-
-//    @Column(nullable = false, unique = true)
-//    private String subscriptionToken;
 }

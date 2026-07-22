@@ -15,19 +15,6 @@ import ru.dxunvrs.xray_subscription.service.SubscriptionService;
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
-//    @GetMapping("/{token}")
-//    public ResponseEntity<String> getSubscription(@PathVariable String token) {
-//        try {
-//            String content = subscriptionService.getSubscriptionContent(token);
-//
-//            return ResponseEntity.ok()
-//                    .body(content);
-//
-//        } catch (IllegalArgumentException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body("Subscription invalid");
-//        }
-//    }
     @GetMapping("/{email}")
     public ResponseEntity<String> getSubscription(@PathVariable String email) {
         try {
