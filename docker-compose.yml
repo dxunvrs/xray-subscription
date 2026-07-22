@@ -1,0 +1,23 @@
+services:
+  xray-core:
+    image: ghcr.io/xtls/xray-core:latest
+    container_name: xray-core
+    restart: always
+    ports:
+      - "${XRAY_SERVER_IP}:${XRAY_SERVER_PORT}:443"
+    volumes:
+      - ./config/config.json:/usr/local/etc/xray/config.json:ro
+    stdin_open: true
+    tty: true
+
+  xray-subscription:
+    build: .
+    container_name: xray-subscription
+    env_file:
+      - .env
+    depends_on:
+      - xray-core
+    ports:
+      - "12258:12258"
+    stdin_open: true
+    tty: true

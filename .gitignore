@@ -1,3 +1,4 @@
+config/config.json
 .env
 xray_subscriber.db
 .gradle
