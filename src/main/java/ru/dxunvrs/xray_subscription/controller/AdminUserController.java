@@ -10,7 +10,6 @@ import ru.dxunvrs.xray_subscription.dto.UserResponse;
 import ru.dxunvrs.xray_subscription.dto.UserTrafficDto;
 import ru.dxunvrs.xray_subscription.entity.UserEntity;
 import ru.dxunvrs.xray_subscription.service.UserService;
-import ru.dxunvrs.xray_subscription.service.XrayGrpcService;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminUserController {
     private final UserService userService;
-    private final XrayGrpcService xrayGrpcService;
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
@@ -51,7 +49,6 @@ public class AdminUserController {
 
     @GetMapping("/{email}/traffic")
     public ResponseEntity<UserTrafficDto> getUserTrafficByEmail(@PathVariable String email) {
-        UserTrafficDto traffic = xrayGrpcService.getUserTraffic(email);
-        return ResponseEntity.ok(traffic);
+        return ResponseEntity.ok(userService.getUserTrafficByEmail(email));
     }
 }

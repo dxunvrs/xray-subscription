@@ -1,6 +1,7 @@
 package ru.dxunvrs.xray_subscription.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class XraySyncService {
     private final UserRepository userRepository;
     private final XrayGrpcService xrayGrpcService;
@@ -22,7 +24,9 @@ public class XraySyncService {
         for (UserEntity user : users) {
             try {
                 xrayGrpcService.addUser(user.getEmail(), user.getUuid());
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                log.warn("Sync failed");
+            }
         }
     }
 }

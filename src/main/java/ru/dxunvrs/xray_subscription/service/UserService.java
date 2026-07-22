@@ -3,6 +3,7 @@ package ru.dxunvrs.xray_subscription.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dxunvrs.xray_subscription.dto.UserTrafficDto;
 import ru.dxunvrs.xray_subscription.entity.UserEntity;
 import ru.dxunvrs.xray_subscription.exception.UserAlreadyExistsException;
 import ru.dxunvrs.xray_subscription.exception.UserNotFoundException;
@@ -47,12 +48,22 @@ public class UserService {
         xrayGrpcService.removeUser(email);
     }
 
+    @Transactional
     public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
+    @Transactional
     public UserEntity findUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+    }
+
+    @Transactional
+    public UserTrafficDto getUserTrafficByEmail(String email) {
+        if (!userRepository.existsByEmail(email)) {
+            throw new UserNotFoundException("User not found");
+        }
+        return xrayGrpcService.getUserTraffic(email);
     }
 }
