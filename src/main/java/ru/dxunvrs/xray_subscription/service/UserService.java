@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dxunvrs.xray_subscription.entity.UserEntity;
+import ru.dxunvrs.xray_subscription.exception.UserAlreadyExistsException;
+import ru.dxunvrs.xray_subscription.exception.UserNotFoundException;
 import ru.dxunvrs.xray_subscription.repository.UserRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -17,7 +20,7 @@ public class UserService {
     @Transactional
     public UserEntity createUser(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("Такой пользователь уже есть");
+            throw new UserAlreadyExistsException("User already exists");
         }
 
         String userUuid = UUID.randomUUID().toString();
@@ -27,6 +30,8 @@ public class UserService {
                 .uuid(userUuid)
                 .build();
 
+        userRepository.save(entity);
+
         xrayGrpcService.addUser(email, userUuid);
 
         return entity;
@@ -35,10 +40,19 @@ public class UserService {
     @Transactional
     public void deleteUser(String email) {
         UserEntity entity = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Нет такого пользователя"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         userRepository.delete(entity);
 
         xrayGrpcService.removeUser(email);
+    }
+
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public UserEntity findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 }
