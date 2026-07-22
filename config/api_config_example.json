@@ -9,6 +9,10 @@
         "statsUserUplink": true,
         "statsUserDownlink": true
       }
+    },
+    "system": {
+      "statsUserUplink": true,
+      "statUserDownlink": true
     }
   },
   "api": {

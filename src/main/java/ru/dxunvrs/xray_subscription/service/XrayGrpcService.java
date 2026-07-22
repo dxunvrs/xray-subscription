@@ -4,6 +4,9 @@ import com.xray.app.proxyman.command.AddUserOperation;
 import com.xray.app.proxyman.command.AlterInboundRequest;
 import com.xray.app.proxyman.command.HandlerServiceGrpc;
 import com.xray.app.proxyman.command.RemoveUserOperation;
+import com.xray.app.stats.command.GetStatsRequest;
+import com.xray.app.stats.command.GetStatsResponse;
+import com.xray.app.stats.command.StatsServiceGrpc;
 import com.xray.common.protocol.User;
 import com.xray.common.serial.TypedMessage;
 import com.xray.proxy.vless.Account;
@@ -13,6 +16,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.dxunvrs.xray_subscription.dto.UserTrafficDto;
 
 @Service
 public class XrayGrpcService {
@@ -27,6 +31,7 @@ public class XrayGrpcService {
 
     private ManagedChannel channel;
     private HandlerServiceGrpc.HandlerServiceBlockingStub handlerStub;
+    private StatsServiceGrpc.StatsServiceBlockingStub statsStub;
 
     @PostConstruct
     public void init() {
@@ -34,6 +39,7 @@ public class XrayGrpcService {
                 .usePlaintext()
                 .build();
         this.handlerStub = HandlerServiceGrpc.newBlockingStub(channel);
+        this.statsStub = StatsServiceGrpc.newBlockingStub(channel);
     }
 
     @PreDestroy
@@ -95,4 +101,26 @@ public class XrayGrpcService {
 
         handlerStub.alterInbound(request);
     }
+
+    public UserTrafficDto getUserTraffic(String email) {
+        long uplink = getStatValue("user>>>" + email + ">>>traffic>>>uplink");
+        long downlink = getStatValue("user>>>" + email + ">>>traffic>>>downlink");
+
+        return new UserTrafficDto(email, uplink, downlink, uplink+downlink);
+    }
+
+    private long getStatValue(String statName) {
+        try {
+            GetStatsRequest request = GetStatsRequest.newBuilder()
+                    .setName(statName)
+                    .setReset(false)
+                    .build();
+
+            GetStatsResponse response = statsStub.getStats(request);
+            return response.getStat().getValue();
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
+
 }
