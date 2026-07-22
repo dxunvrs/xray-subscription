@@ -39,6 +39,10 @@ docker compose up -d
 ```
 Получите ключ ```GET localhost:12258/sub/test```, либо вставьте эту ссылку в впн-клиент
 
+## Документация
+Доступна интерактивная документация Swagger 
+```http://localhost:12258/swagger_ui/index.html```
+
 ## Админские эндпоинты (нужен пароль)
 ### 1. Добавление пользователя
 - URL: ```/api/admin/users```
@@ -100,7 +104,7 @@ docker compose up -d
 vless://.......
 ```
 
-## Технологический стек
+## Стек технологий
 - Java 21
 - Spring Boot 4
 - Spring Security, Spring gRPC
