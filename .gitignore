@@ -1,3 +1,4 @@
+.env
 xray_subscriber.db
 .gradle
 build/
