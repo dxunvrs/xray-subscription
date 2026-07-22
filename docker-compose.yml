@@ -19,5 +19,7 @@ services:
       - xray-core
     ports:
       - "12258:12258"
+    volumes:
+      - ./data:/app/data
     stdin_open: true
     tty: true

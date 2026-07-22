@@ -1,6 +1,6 @@
 config/config.json
 .env
-xray_subscriber.db
+data/
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
