@@ -41,7 +41,7 @@ docker compose up -d
 
 ## Документация
 Доступна интерактивная документация Swagger 
-```http://localhost:12258/swagger_ui/index.html```
+```http://localhost:12258/swagger-ui/index.html```
 
 ## Админские эндпоинты (нужен пароль)
 ### 1. Добавление пользователя

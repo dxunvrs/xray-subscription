@@ -12,6 +12,7 @@ services:
 
   xray-subscription:
     build: .
+    # image: ghcr.io/dxunvrs/xray-subscription:latest - for CI/CD
     container_name: xray-subscription
     env_file:
       - .env

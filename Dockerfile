@@ -7,7 +7,7 @@ RUN ./gradlew bootJar
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-COPY --from=builder /build/build/libs/xray-subscription-1.0.jar app.jar
+COPY --from=builder /build/build/libs/*.jar app.jar
 
 EXPOSE 12258
 

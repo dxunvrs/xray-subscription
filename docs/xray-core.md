@@ -9,7 +9,7 @@ UUID для первого клиента
 ```
 docker run --rm ghcr.io/xtls/xray-core:latest uuid 
 ```
-Short ID для первого клиента
+Short ID
 ```
 openssl rand -hex 8
 ```
