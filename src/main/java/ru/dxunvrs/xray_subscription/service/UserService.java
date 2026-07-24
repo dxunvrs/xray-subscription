@@ -3,7 +3,7 @@ package ru.dxunvrs.xray_subscription.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dxunvrs.xray_subscription.dto.UserTrafficDto;
+import ru.dxunvrs.xray_subscription.dto.UserResponse;
 import ru.dxunvrs.xray_subscription.entity.UserEntity;
 import ru.dxunvrs.xray_subscription.exception.UserAlreadyExistsException;
 import ru.dxunvrs.xray_subscription.exception.UserNotFoundException;
@@ -19,23 +19,23 @@ public class UserService {
     private final XrayGrpcService xrayGrpcService;
 
     @Transactional
-    public UserEntity createUser(String email) {
+    public UserResponse createUser(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException("User already exists");
         }
 
         String userUuid = UUID.randomUUID().toString();
 
-        UserEntity entity = UserEntity.builder()
-                .email(email)
-                .uuid(userUuid)
-                .build();
-
-        userRepository.save(entity);
+        UserEntity createdUser = userRepository.save(
+                UserEntity.builder()
+                        .email(email)
+                        .uuid(userUuid)
+                        .build()
+        );
 
         xrayGrpcService.addUser(email, userUuid);
 
-        return entity;
+        return toUserDto(createdUser);
     }
 
     @Transactional
@@ -49,21 +49,24 @@ public class UserService {
     }
 
     @Transactional
-    public List<UserEntity> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<UserEntity> users = userRepository.findAll();
+        return users.stream().map(this::toUserDto).toList();
     }
 
     @Transactional
-    public UserEntity findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+    public UserResponse findUserByEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+        return toUserDto(userEntity);
     }
 
-    @Transactional
-    public UserTrafficDto getUserTrafficByEmail(String email) {
-        if (!userRepository.existsByEmail(email)) {
-            throw new UserNotFoundException("User not found");
-        }
-        return xrayGrpcService.getUserTraffic(email);
+    private UserResponse toUserDto(UserEntity userEntity) {
+        return new UserResponse(
+                userEntity.getId(),
+                userEntity.getEmail(),
+                userEntity.getUuid(),
+                xrayGrpcService.getUserTraffic(userEntity.getEmail())
+        );
     }
 }

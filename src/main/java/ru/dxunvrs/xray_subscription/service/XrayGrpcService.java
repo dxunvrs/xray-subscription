@@ -16,7 +16,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.dxunvrs.xray_subscription.dto.UserTrafficDto;
+import ru.dxunvrs.xray_subscription.dto.UserTraffic;
 
 @Service
 public class XrayGrpcService {
@@ -102,11 +102,11 @@ public class XrayGrpcService {
         handlerStub.alterInbound(request);
     }
 
-    public UserTrafficDto getUserTraffic(String email) {
+    public UserTraffic getUserTraffic(String email) {
         long uplink = getStatValue("user>>>" + email + ">>>traffic>>>uplink");
         long downlink = getStatValue("user>>>" + email + ">>>traffic>>>downlink");
 
-        return new UserTrafficDto(email, uplink, downlink, uplink+downlink);
+        return new UserTraffic(uplink, downlink, uplink+downlink);
     }
 
     private long getStatValue(String statName) {
@@ -122,5 +122,4 @@ public class XrayGrpcService {
             return 0L;
         }
     }
-
 }

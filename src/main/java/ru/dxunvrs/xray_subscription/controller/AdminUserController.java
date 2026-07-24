@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dxunvrs.xray_subscription.dto.CreateUserRequest;
 import ru.dxunvrs.xray_subscription.dto.UserResponse;
-import ru.dxunvrs.xray_subscription.dto.UserTrafficDto;
-import ru.dxunvrs.xray_subscription.entity.UserEntity;
 import ru.dxunvrs.xray_subscription.service.UserService;
 
 import java.util.List;
@@ -30,17 +28,16 @@ public class AdminUserController {
     )
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
-        UserEntity created = userService.createUser(request.email());
+        UserResponse created = userService.createUser(request.email());
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(UserResponse.fromEntity(created));
+                .body(created);
     }
 
     @Operation(summary = "Получить данные о всех пользователях")
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = userService.getAllUsers().stream()
-                .map(UserResponse::fromEntity)
-                .toList();
+        List<UserResponse> users = userService.getAllUsers();
 
         return ResponseEntity.ok(users);
     }
@@ -48,23 +45,16 @@ public class AdminUserController {
     @Operation(summary = "Получить данные о конкретном пользователе")
     @GetMapping("/{email}")
     public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
-        UserEntity user = userService.findUserByEmail(email);
-        return ResponseEntity.ok(UserResponse.fromEntity(user));
+        UserResponse user = userService.findUserByEmail(email);
+
+        return ResponseEntity.ok(user);
     }
 
     @Operation(summary = "Удаление пользователя по его email")
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> deleteUserByEmail(@PathVariable String email) {
         userService.deleteUser(email);
-        return ResponseEntity.noContent().build();
-    }
 
-    @Operation(
-            summary = "Статистика трафика пользователя",
-            description = "Показывает статистику использования: входящий, исходящий и суммарный трафик (в байтах)"
-    )
-    @GetMapping("/{email}/traffic")
-    public ResponseEntity<UserTrafficDto> getUserTrafficByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(userService.getUserTrafficByEmail(email));
+        return ResponseEntity.noContent().build();
     }
 }
