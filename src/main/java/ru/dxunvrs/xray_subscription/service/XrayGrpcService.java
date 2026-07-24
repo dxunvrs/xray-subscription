@@ -102,11 +102,12 @@ public class XrayGrpcService {
         handlerStub.alterInbound(request);
     }
 
-    public UserTraffic getUserTraffic(String email) {
-        long uplink = getStatValue("user>>>" + email + ">>>traffic>>>uplink");
-        long downlink = getStatValue("user>>>" + email + ">>>traffic>>>downlink");
+    public long getUserUplink(String email) {
+        return getStatValue("user>>>" + email + ">>>traffic>>>uplink");
+    }
 
-        return new UserTraffic(uplink, downlink, uplink+downlink);
+    public long getUserDownlink(String email) {
+        return getStatValue("user>>>" + email + ">>>downlink");
     }
 
     private long getStatValue(String statName) {

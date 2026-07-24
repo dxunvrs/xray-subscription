@@ -43,3 +43,7 @@ dependencies {
 	implementation 'org.xerial:sqlite-jdbc'
 	implementation 'org.hibernate.orm:hibernate-community-dialects'
 }
+
+test {
+	useJUnitPlatform()
+}

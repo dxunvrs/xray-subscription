@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dxunvrs.xray_subscription.dto.UserResponse;
+import ru.dxunvrs.xray_subscription.dto.UserTraffic;
 import ru.dxunvrs.xray_subscription.entity.UserEntity;
 import ru.dxunvrs.xray_subscription.exception.UserAlreadyExistsException;
 import ru.dxunvrs.xray_subscription.exception.UserNotFoundException;
 import ru.dxunvrs.xray_subscription.repository.UserRepository;
+import ru.dxunvrs.xray_subscription.util.DataSizeFormatter;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +19,8 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final XrayGrpcService xrayGrpcService;
+
+    private final DataSizeFormatter dataSizeFormatter;
 
     @Transactional
     public UserResponse createUser(String email) {
@@ -62,11 +66,21 @@ public class UserService {
     }
 
     private UserResponse toUserDto(UserEntity userEntity) {
+        long userUplinkBytes = xrayGrpcService.getUserUplink(userEntity.getEmail());
+        long userDownlinkBytes = xrayGrpcService.getUserDownlink(userEntity.getEmail());
+        long userTotalBytes = userUplinkBytes + userDownlinkBytes;
         return new UserResponse(
                 userEntity.getId(),
                 userEntity.getEmail(),
                 userEntity.getUuid(),
-                xrayGrpcService.getUserTraffic(userEntity.getEmail())
+                new UserTraffic(
+                        dataSizeFormatter.formatBytes(userUplinkBytes),
+                        dataSizeFormatter.formatBytes(userDownlinkBytes),
+                        dataSizeFormatter.formatBytes(userTotalBytes),
+                        userUplinkBytes,
+                        userDownlinkBytes,
+                        userTotalBytes
+                )
         );
     }
 }
