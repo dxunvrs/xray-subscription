@@ -51,3 +51,8 @@ docker compose up -d
 - SQLite
 - Xray Core
 - Docker & Docker Compose 
+
+## Доп ссылки
+Более производительная версия api на Go: [репозиторий](https://github.com/dxunvrs/xray-subscription-go) (есть готовый докер образ ```ghcr.io/dxunvrs/xray-subscription-go:latest```)  
+[Гайд](https://github.com/dxunvrs/xray-subscription/tree/master/docs/fallbacks.md) на fallbacks  
+[Гайд](https://github.com/dxunvrs/xray-subscription/tree/master/docs/advanced.md) на увеличенную скорость подключения
