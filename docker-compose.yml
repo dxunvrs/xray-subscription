@@ -5,6 +5,8 @@ services:
     restart: always
     ports:
       - "${XRAY_SERVER_IP}:${XRAY_SERVER_PORT}:443"
+    #network_mode: "host" - for max speed
+    #user: "0.0" - if you use host network_mode
     volumes:
       - ./config/config.json:/usr/local/etc/xray/config.json:ro
     stdin_open: true
@@ -19,8 +21,8 @@ services:
     depends_on:
       - xray-core
     ports:
-      - "12258:12258"
+      - "12285:12285"
     volumes:
-      - ./data:/app/data
+      - ./data/app/data
     stdin_open: true
     tty: true

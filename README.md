@@ -20,6 +20,7 @@ ADMIN_USERNAME=admin - имя админа
 ADMIN_PASSWORD=1234 - пароль админа
 
 XRAY_GRPC_HOST=xray-core - имя докер-контейнера с ядром xray
+XRAY_GRPC_PORT=10085 - порт для работы с ядром xray
 ```
 
 ### 3. Конфиг
