@@ -14,6 +14,7 @@ import io.grpc.Grpc;
 import io.grpc.InsecureChannelCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.netty.NettyChannelBuilder;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,10 +40,8 @@ public class XrayGrpcService {
 
     @PostConstruct
     public void init() {
-        this.channel = Grpc.newChannelBuilder(
-                grpcTarget,
-                InsecureChannelCredentials.create()
-        ).build();
+        this.channel = NettyChannelBuilder.forTarget(grpcTarget)
+                .usePlaintext().build();
         this.handlerStub = HandlerServiceGrpc.newBlockingStub(channel);
         this.statsStub = StatsServiceGrpc.newBlockingStub(channel);
     }
