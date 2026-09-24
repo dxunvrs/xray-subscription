@@ -10,10 +10,7 @@ import com.xray.app.stats.command.StatsServiceGrpc;
 import com.xray.common.protocol.User;
 import com.xray.common.serial.TypedMessage;
 import com.xray.proxy.vless.Account;
-import io.grpc.Grpc;
-import io.grpc.InsecureChannelCredentials;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.netty.NettyChannelBuilder;
 import io.netty.channel.epoll.EpollDomainSocketChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
@@ -25,12 +22,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class XrayGrpcService {
-//    @Value("${xray.grpc.host}")
-//    private String grpcHost;
-//
-//    @Value("${xray.grpc.port}")
-//    private int grpcPort;
-
     @Value("${xray.grpc.target}")
     private String grpcTarget;
 

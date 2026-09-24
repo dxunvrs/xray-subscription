@@ -19,8 +19,7 @@ XRAY_REALITY_FINGERPRINT=firefox - любой браузер
 ADMIN_USERNAME=admin - имя админа
 ADMIN_PASSWORD=1234 - пароль админа
 
-XRAY_GRPC_HOST=xray-core - имя докер-контейнера с ядром xray
-XRAY_GRPC_PORT=10085 - порт для работы с ядром xray
+XRAY_GRPC_TARGET=/run/xray/api.sock - сокет для обращения к ядру
 ```
 
 ### 3. Конфиг
@@ -32,7 +31,7 @@ docker compose up -d
 ```
 
 ### 5. Первый ключ
-Добавьте пользователя через ```POST localhost:12258/api/admin/users```, тело запроса: 
+Добавьте пользователя через ```POST localhost:12285/api/admin/users```, тело запроса: 
 ```JSON
 {
   "email": "test"
@@ -54,5 +53,4 @@ docker compose up -d
 
 ## Доп ссылки
 Более производительная версия api на Go: [репозиторий](https://github.com/dxunvrs/xray-subscription-go) (есть готовый докер образ ```ghcr.io/dxunvrs/xray-subscription-go:latest```)  
-[Гайд](https://github.com/dxunvrs/xray-subscription/tree/master/docs/fallbacks.md) на fallbacks  
-[Гайд](https://github.com/dxunvrs/xray-subscription/tree/master/docs/advanced.md) на увеличенную скорость подключения
+[Гайд](https://github.com/dxunvrs/xray-subscription/tree/master/docs/fallbacks.md) на fallbacks
