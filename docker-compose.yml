@@ -20,7 +20,7 @@ services:
     tty: true
 
   xray-subscription:
-    image: ghcr.io/dxunvrs/xray-subscription:feat-sockets
+    image: ghcr.io/dxunvrs/xray-subscription:latest
     container_name: xray-subscription
     env_file:
       - .env
