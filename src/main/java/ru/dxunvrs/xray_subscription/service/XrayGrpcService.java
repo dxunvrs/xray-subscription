@@ -10,21 +10,25 @@ import com.xray.app.stats.command.StatsServiceGrpc;
 import com.xray.common.protocol.User;
 import com.xray.common.serial.TypedMessage;
 import com.xray.proxy.vless.Account;
+import io.grpc.Grpc;
+import io.grpc.InsecureChannelCredentials;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.dxunvrs.xray_subscription.dto.UserTraffic;
 
 @Service
 public class XrayGrpcService {
-    @Value("${xray.grpc.host}")
-    private String grpcHost;
+//    @Value("${xray.grpc.host}")
+//    private String grpcHost;
+//
+//    @Value("${xray.grpc.port}")
+//    private int grpcPort;
 
-    @Value("${xray.grpc.port}")
-    private int grpcPort;
+    @Value("${xray.grpc.target}")
+    private String grpcTarget;
 
     @Value("${xray.inbound.tag}")
     private String inboundTag;
@@ -35,9 +39,10 @@ public class XrayGrpcService {
 
     @PostConstruct
     public void init() {
-        this.channel = ManagedChannelBuilder.forAddress(grpcHost, grpcPort)
-                .usePlaintext()
-                .build();
+        this.channel = Grpc.newChannelBuilder(
+                grpcTarget,
+                InsecureChannelCredentials.create()
+        ).build();
         this.handlerStub = HandlerServiceGrpc.newBlockingStub(channel);
         this.statsStub = StatsServiceGrpc.newBlockingStub(channel);
     }
