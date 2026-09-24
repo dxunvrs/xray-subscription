@@ -3,18 +3,24 @@ services:
     image: ghcr.io/xtls/xray-core:latest
     container_name: xray-core
     restart: always
-    ports:
-      - "${XRAY_SERVER_IP}:${XRAY_SERVER_PORT}:443"
-    #network_mode: "host" - for max speed
-    #user: "0.0" - if you use host network_mode
+    network_mode: "host"
+    user: "0.0"
+    environment:
+      - TZ=Europe/Moscow
     volumes:
       - ./config/config.json:/usr/local/etc/xray/config.json:ro
+      - /usr/share/zoneinfo/Europe/Moscow:/etc/localtime:ro
+      - ./sockets:/run/xray:rw
+    logging:
+        driver: "json-file"
+        options:
+            max-size: "20m"
+            max-file: "2"
     stdin_open: true
     tty: true
 
   xray-subscription:
-    build: .
-    # image: ghcr.io/dxunvrs/xray-subscription:latest - for CI/CD
+    image: ghcr.io/dxunvrs/xray-subscription:feat-sockets
     container_name: xray-subscription
     env_file:
       - .env
@@ -24,5 +30,6 @@ services:
       - "12285:12285"
     volumes:
       - ./data/app/data
+      - ./sockets:/run/xray:rw
     stdin_open: true
     tty: true

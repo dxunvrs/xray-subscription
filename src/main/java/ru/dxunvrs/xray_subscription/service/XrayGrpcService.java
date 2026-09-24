@@ -11,20 +11,19 @@ import com.xray.common.protocol.User;
 import com.xray.common.serial.TypedMessage;
 import com.xray.proxy.vless.Account;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.netty.NettyChannelBuilder;
+import io.netty.channel.epoll.EpollDomainSocketChannel;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.unix.DomainSocketAddress;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.dxunvrs.xray_subscription.dto.UserTraffic;
 
 @Service
 public class XrayGrpcService {
-    @Value("${xray.grpc.host}")
-    private String grpcHost;
-
-    @Value("${xray.grpc.port}")
-    private int grpcPort;
+    @Value("${xray.grpc.target}")
+    private String grpcTarget;
 
     @Value("${xray.inbound.tag}")
     private String inboundTag;
@@ -35,7 +34,9 @@ public class XrayGrpcService {
 
     @PostConstruct
     public void init() {
-        this.channel = ManagedChannelBuilder.forAddress(grpcHost, grpcPort)
+        this.channel = NettyChannelBuilder.forAddress(new DomainSocketAddress(grpcTarget))
+                .channelType(EpollDomainSocketChannel.class)
+                .eventLoopGroup(new EpollEventLoopGroup())
                 .usePlaintext()
                 .build();
         this.handlerStub = HandlerServiceGrpc.newBlockingStub(channel);

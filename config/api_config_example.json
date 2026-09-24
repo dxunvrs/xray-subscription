@@ -26,8 +26,14 @@
   "inbounds": [
     {
       "tag": "dock-api",
-      "port": 10085,
-      "protocol": "dokodemo-door"
+      "listen": "/run/xray/api.sock",
+      "port": 0,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "/run/xray/api.sock",
+        "port": 23456,
+        "network": "unix"
+      }
     },
     {
       "tag": "vless-inbound",
