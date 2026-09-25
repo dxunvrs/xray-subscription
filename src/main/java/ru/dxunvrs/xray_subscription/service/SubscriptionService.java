@@ -20,4 +20,12 @@ public class SubscriptionService {
 
         return vlessLinkBuilder.buildVlessLink(user.getUuid(), email);
     }
+
+    @Transactional(readOnly = true)
+    public String getHappSubscriptionContent(String email) {
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return vlessLinkBuilder.buildHappSubscription(user.getUuid(), email);
+    }
 }
