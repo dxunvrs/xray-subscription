@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 @Component
 public class VlessLinkBuilder {
     @Value("${xray.server.ip}")
@@ -24,6 +27,9 @@ public class VlessLinkBuilder {
     @Value("${xray.reality.fp}")
     private String fingerprint;
 
+    @Value("${xray.happ.routing.rule}")
+    private String happRoutingRule;
+
     public String buildVlessLink(String userUuid,
                                  String userEmail) {
         return UriComponentsBuilder.newInstance()
@@ -41,5 +47,13 @@ public class VlessLinkBuilder {
                 .fragment(userEmail)
                 .build()
                 .toUriString();
+    }
+
+    public String buildHappSubscription(String userUuid,
+                                        String userEmail) {
+        String vlessLink = buildVlessLink(userUuid, userEmail);
+        String combined = vlessLink + "\n" + happRoutingRule;
+
+        return Base64.getEncoder().encodeToString(combined.getBytes(StandardCharsets.UTF_8));
     }
 }

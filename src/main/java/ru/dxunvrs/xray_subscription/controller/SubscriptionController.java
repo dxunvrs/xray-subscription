@@ -28,4 +28,15 @@ public class SubscriptionController {
         return ResponseEntity.ok()
                 .body(content);
     }
+
+    @Operation(
+            summary = "Получить подписку с роутингом в Happ",
+            description = "Vless + routing rules"
+    )
+    public ResponseEntity<String> getHappSubscription(@PathVariable String email) {
+        String content = subscriptionService.getHappSubscriptionContent(email);
+
+        return ResponseEntity.ok()
+                .body(content);
+    }
 }
