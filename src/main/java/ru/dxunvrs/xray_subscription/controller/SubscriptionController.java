@@ -33,6 +33,7 @@ public class SubscriptionController {
             summary = "Получить подписку с роутингом в Happ",
             description = "Vless + routing rules"
     )
+    @GetMapping("/happ/{email}")
     public ResponseEntity<String> getHappSubscription(@PathVariable String email) {
         String content = subscriptionService.getHappSubscriptionContent(email);
 
