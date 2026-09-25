@@ -103,19 +103,19 @@ public class XrayGrpcService {
         handlerStub.alterInbound(request);
     }
 
-    public long getUserUplink(String email) {
-        return getStatValue("user>>>" + email + ">>>traffic>>>uplink");
+    public long getUserUplink(String email, boolean reset) {
+        return getStatValue("user>>>" + email + ">>>traffic>>>uplink", reset);
     }
 
-    public long getUserDownlink(String email) {
-        return getStatValue("user>>>" + email + ">>>downlink");
+    public long getUserDownlink(String email, boolean reset) {
+        return getStatValue("user>>>" + email + ">>>downlink", reset);
     }
 
-    private long getStatValue(String statName) {
+    private long getStatValue(String statName, boolean reset) {
         try {
             GetStatsRequest request = GetStatsRequest.newBuilder()
                     .setName(statName)
-                    .setReset(false)
+                    .setReset(reset)
                     .build();
 
             GetStatsResponse response = statsStub.getStats(request);

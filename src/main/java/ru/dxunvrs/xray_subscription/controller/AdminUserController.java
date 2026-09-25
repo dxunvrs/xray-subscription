@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.dxunvrs.xray_subscription.dto.CreateUserRequest;
 import ru.dxunvrs.xray_subscription.dto.UserResponse;
 import ru.dxunvrs.xray_subscription.service.UserService;
+import ru.dxunvrs.xray_subscription.service.XraySyncService;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
 @SecurityRequirement(name = "basicAuth")
 public class AdminUserController {
     private final UserService userService;
+    private final XraySyncService xraySyncService;
 
     @Operation(
             summary = "Создать нового пользователя",
@@ -56,5 +58,15 @@ public class AdminUserController {
         userService.deleteUser(email);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+            summary = "Синхронизировать статистику",
+            description = "Опрашивает xray-core и обновляет бд"
+    )
+    @PostMapping("/sync")
+    public ResponseEntity<Void> syncNow() {
+        xraySyncService.syncUserStats();
+        return ResponseEntity.ok().build();
     }
 }

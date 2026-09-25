@@ -20,4 +20,12 @@ public class UserEntity {
 
     @Column(nullable = false, unique = true)
     private String uuid;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Long uplink = 0L;
+
+    @Column(nullable=false)
+    @Builder.Default
+    private Long downlink = 0L;
 }

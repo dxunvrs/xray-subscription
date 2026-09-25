@@ -66,8 +66,8 @@ public class UserService {
     }
 
     private UserResponse toUserDto(UserEntity userEntity) {
-        long userUplinkBytes = xrayGrpcService.getUserUplink(userEntity.getEmail());
-        long userDownlinkBytes = xrayGrpcService.getUserDownlink(userEntity.getEmail());
+        long userUplinkBytes = userEntity.getUplink();
+        long userDownlinkBytes = userEntity.getDownlink();
         long userTotalBytes = userUplinkBytes + userDownlinkBytes;
         return new UserResponse(
                 userEntity.getId(),

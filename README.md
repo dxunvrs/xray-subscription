@@ -16,10 +16,12 @@ XRAY_REALITY_PUBLIC_KEY=pub_key - сгенерированный публичн�
 XRAY_REALITY_SHORT_ID=short_id - сгенерированный SHORT ID
 XRAY_REALITY_SNI=apple.com - маскировка
 XRAY_REALITY_FINGERPRINT=firefox - любой браузер
+
 ADMIN_USERNAME=admin - имя админа
 ADMIN_PASSWORD=1234 - пароль админа
 
 XRAY_GRPC_TARGET=/run/xray/api.sock - сокет для обращения к ядру
+XRAY_STATS_SYNC_INTERVAL=20m - интервал для синхронизации
 ```
 
 ### 3. Конфиг
