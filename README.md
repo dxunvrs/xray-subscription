@@ -22,6 +22,7 @@ ADMIN_PASSWORD=1234 - пароль админа
 
 XRAY_GRPC_TARGET=/run/xray/api.sock - сокет для обращения к ядру
 XRAY_STATS_SYNC_INTERVAL=20m - интервал для синхронизации
+XRAY_HAPP_ROUTING_RULE=happ://routing/... - опционально для настроек маршрутизации в Happ
 ```
 
 ### 3. Конфиг
