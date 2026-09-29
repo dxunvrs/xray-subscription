@@ -108,7 +108,7 @@ public class XrayGrpcService {
     }
 
     public long getUserDownlink(String email, boolean reset) {
-        return getStatValue("user>>>" + email + ">>>downlink", reset);
+        return getStatValue("user>>>" + email + ">>>traffic>>>downlink", reset);
     }
 
     private long getStatValue(String statName, boolean reset) {
