@@ -40,6 +40,7 @@ docker compose up -d
 vless://CLIENT_UUID@SERVER_IP:PORT?type=tcp&security=reality&pbk=PUBLIC_KEY&fp=BROWSER&sni=SNI&sid=SHORT_ID&flow=xtls-rprx-vision#NAME
 ```
 - CLIENT_UUID, PUBLIC_KEY, SHORT_ID - генерировали ранее
+- BROWSER - имя браузера
 - SERVER_IP - IP вашего сервера
 - PORT - указан в config_example.json - 443, можно изменить
 - SNI - указан в config_example.json - apple.com, можно изменить
