@@ -1,0 +1,14 @@
+xray:
+  servers:
+    - name: "Port 443 (TCP)"
+      tag: "vless-inbound"
+      port: 443
+      network: "tcp"
+      flow: "xtls-rprx-vision"
+
+    - name: "Port 1443 (xhttp)"
+      tag: "vless-xhttp-inbound"
+      port: 1443
+      network: "xhttp"
+      path: "/app-stream"
+      mode: "auto"

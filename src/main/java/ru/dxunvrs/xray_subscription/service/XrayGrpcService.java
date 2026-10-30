@@ -17,16 +17,18 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.unix.DomainSocketAddress;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.dxunvrs.xray_subscription.config.XrayProperties;
 
 @Service
+@RequiredArgsConstructor
 public class XrayGrpcService {
     @Value("${xray.grpc.target}")
     private String grpcTarget;
 
-    @Value("${xray.inbound.tag}")
-    private String inboundTag;
+    private final XrayProperties xrayProperties;
 
     private ManagedChannel channel;
     private HandlerServiceGrpc.HandlerServiceBlockingStub handlerStub;
@@ -50,16 +52,23 @@ public class XrayGrpcService {
         }
     }
 
-    public void addUser(String email,
-                        String uuid) {
-        Account vlessAccount = Account.newBuilder()
-                .setId(uuid)
-                .setFlow("xtls-rprx-vision")
-                .build();
+    public void addUser(String email, String uuid) {
+        for (XrayProperties.ServerConfig server : xrayProperties.getEffectiveServers()) {
+            String tag = server.resolveTag(xrayProperties.getInbound().getTag());
+            String flow = server.resolveFlow();
+            addUserToInbound(email, uuid, tag, flow);
+        }
+    }
+
+    private void addUserToInbound(String email, String uuid, String tag, String flow) {
+        Account.Builder accountBuilder = Account.newBuilder().setId(uuid);
+        if (flow != null && !flow.isBlank()) {
+            accountBuilder.setFlow(flow);
+        }
 
         TypedMessage typedAccount = TypedMessage.newBuilder()
                 .setType("xray.proxy.vless.Account")
-                .setValue(vlessAccount.toByteString())
+                .setValue(accountBuilder.build().toByteString())
                 .build();
 
         User user = User.newBuilder()
@@ -78,7 +87,7 @@ public class XrayGrpcService {
                 .build();
 
         AlterInboundRequest request = AlterInboundRequest.newBuilder()
-                .setTag(inboundTag)
+                .setTag(tag)
                 .setOperation(typedOperation)
                 .build();
 
@@ -86,6 +95,13 @@ public class XrayGrpcService {
     }
 
     public void removeUser(String email) {
+        for (XrayProperties.ServerConfig server : xrayProperties.getEffectiveServers()) {
+            String tag = server.resolveTag(xrayProperties.getInbound().getTag());
+            removeUserFromInbound(email, tag);
+        }
+    }
+
+    private void removeUserFromInbound(String email, String tag) {
         RemoveUserOperation removeUserOperation = RemoveUserOperation.newBuilder()
                 .setEmail(email)
                 .build();
@@ -96,7 +112,7 @@ public class XrayGrpcService {
                 .build();
 
         AlterInboundRequest request = AlterInboundRequest.newBuilder()
-                .setTag(inboundTag)
+                .setTag(tag)
                 .setOperation(typedOperation)
                 .build();
 

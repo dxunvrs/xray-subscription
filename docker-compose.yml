@@ -29,7 +29,8 @@ services:
     ports:
       - "12285:12285"
     volumes:
-      - ./data/app/data
+      - ./data:/app/data
+      - ./config:/app/config:ro
       - ./sockets:/run/xray:rw
     stdin_open: true
     tty: true
